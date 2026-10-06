@@ -60,11 +60,11 @@ export default function App() {
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: false, listener: onScrollJS })}
         onContentSizeChange={(_, h) => setContentH(h)}
         onLayout={(e) => setViewportH(e.nativeEvent.layout.height)}
-        contentContainerStyle={[styles.content, { paddingHorizontal: pad, paddingRight: pad + 56 }]}
+        contentContainerStyle={[styles.content, { paddingHorizontal: pad, paddingRight: pad + (narrow ? 44 : 56) }]}
       >
         {/* ───── HERO ───── */}
         <View onLayout={track('hero')} style={[styles.hero, narrow && { flexDirection: 'column', alignItems: 'flex-start' }]}>
-          <Image source={{ uri: workstation }} style={styles.avatar} resizeMode="contain" />
+          <Image source={{ uri: workstation }} style={[styles.avatar, narrow && m.avatar]} resizeMode="contain" />
           <View style={[styles.statusBox, glow(COLORS.pink), { flex: narrow ? undefined : 1, alignSelf: narrow ? 'stretch' : 'center' }]}>
             <View style={styles.statusInner}>
               <View style={styles.statusRow}>
@@ -76,29 +76,29 @@ export default function App() {
           </View>
         </View>
 
-        <View style={styles.titleBlock}>
-          <Text style={[styles.firstName, textGlow(COLORS.cyan), narrow && { fontSize: 30 }]}>{PROFILE.firstName.toUpperCase()}</Text>
-          <Text style={[styles.lastName, textGlow(COLORS.pink), narrow && { fontSize: 38 }]}>{PROFILE.lastName.toUpperCase()}</Text>
-          <Text style={styles.role}>{PROFILE.role}</Text>
+        <View style={[styles.titleBlock, narrow && { marginTop: 40 }]}>
+          <Text style={[styles.firstName, textGlow(COLORS.cyan), narrow && m.firstName]}>{PROFILE.firstName.toUpperCase()}</Text>
+          <Text style={[styles.lastName, textGlow(COLORS.pink), narrow && m.lastName]}>{PROFILE.lastName.toUpperCase()}</Text>
+          <Text style={[styles.role, narrow && m.role]}>{PROFILE.role}</Text>
           <NeonButton label="VOIR LES PROJETS ↓" onPress={() => goTo('projects')} small={narrow} />
         </View>
 
         {/* ───── NAV « écrans » ───── */}
-        <View style={[styles.monitors, narrow && { flexDirection: 'column' }]}>
+        <View style={[styles.monitors, narrow && m.monitors]}>
           {[['about', 'À PROPOS'], ['skills', 'COMPÉTENCES'], ['contact', 'CONTACT']].map(([k, l]) => (
-            <Monitor key={k} label={l} onPress={() => goTo(k)} />
+            <Monitor key={k} label={l} onPress={() => goTo(k)} narrow={narrow} />
           ))}
         </View>
 
         {/* ───── PRÉSENTATION ───── */}
-        <Section onLayout={track('about')} kicker="01" title="Présentation">
+        <Section narrow={narrow} onLayout={track('about')} kicker="01" title="Présentation">
           <Panel>
-            <Text style={styles.body}>{PROFILE.about}</Text>
+            <Text style={[styles.body, narrow && m.body]}>{PROFILE.about}</Text>
           </Panel>
         </Section>
 
         {/* ───── COMPÉTENCES ───── */}
-        <Section onLayout={track('skills')} kicker="02" title="Compétences">
+        <Section narrow={narrow} onLayout={track('skills')} kicker="02" title="Compétences">
           <View style={[styles.cols, narrow && { flexDirection: 'column' }]}>
             {SKILLS.map((g) => (
               <Panel key={g.group} style={{ flex: 1 }}>
@@ -120,17 +120,17 @@ export default function App() {
         </Section>
 
         {/* ───── VIDÉO 3D ───── */}
-        <Section onLayout={track('video')} kicker="03" title={VIDEO.title}>
+        <Section narrow={narrow} onLayout={track('video')} kicker="03" title={VIDEO.title}>
           <View style={[styles.chatFrame, glow(COLORS.pink)]}>
-            <View style={styles.chatHeader}>
-              <Text style={styles.chatTitle}>CHAÎNE YOUTUBE</Text>
+            <View style={[styles.chatHeader, narrow && { padding: 14 }]}>
+              <Text style={[styles.chatTitle, narrow && { fontSize: 15 }]}>CHAÎNE YOUTUBE</Text>
               <Text style={styles.online}>● EN LIGNE</Text>
             </View>
             <View style={styles.video}>
               <VideoPlayer youtubeId={VIDEO.youtubeId} />
             </View>
-            <View style={{ padding: 16 }}>
-              <Text style={styles.body}>{VIDEO.description}</Text>
+            <View style={{ padding: narrow ? 14 : 16 }}>
+              <Text style={[styles.body, narrow && m.body]}>{VIDEO.description}</Text>
               <View style={styles.tags}>
                 {VIDEO.tools.map((t) => <Tag key={t} label={t} />)}
               </View>
@@ -140,24 +140,24 @@ export default function App() {
         </Section>
 
         {/* ───── PROJETS ───── */}
-        <Section onLayout={track('projects')} kicker="04" title="Projets">
+        <Section narrow={narrow} onLayout={track('projects')} kicker="04" title="Projets">
           <View style={[styles.cols, narrow && { flexDirection: 'column' }]}>
             {PROJECTS.map((p) => (
               <Panel key={p.title} style={{ flex: 1 }}>
                 <Tag label={p.tag} />
                 <Text style={[styles.groupTitle, { marginTop: 10 }]}>{p.title}</Text>
-                <Text style={styles.body}>{p.text}</Text>
+                <Text style={[styles.body, narrow && m.body]}>{p.text}</Text>
               </Panel>
             ))}
           </View>
         </Section>
 
         {/* ───── CONTACT ───── */}
-        <Section onLayout={track('contact')} kicker="05" title="Me retrouver">
+        <Section narrow={narrow} onLayout={track('contact')} kicker="05" title="Me retrouver">
           <View style={[styles.cols, narrow && { flexDirection: 'column' }]}>
-            <LinkCard label="GITHUB" sub="Mon code" url={LINKS.github} color={COLORS.cyan} />
-            <LinkCard label="LINKEDIN" sub="Mon parcours" url={LINKS.linkedin} color={COLORS.pink} />
-            <LinkCard label="YOUTUBE" sub="Mes projets 3D" url={LINKS.youtube} color={COLORS.pinkSoft} />
+            <LinkCard narrow={narrow} label="GITHUB" sub="Mon code" url={LINKS.github} color={COLORS.cyan} />
+            <LinkCard narrow={narrow} label="LINKEDIN" sub="Mon parcours" url={LINKS.linkedin} color={COLORS.pink} />
+            <LinkCard narrow={narrow} label="YOUTUBE" sub="Mes projets 3D" url={LINKS.youtube} color={COLORS.pinkSoft} />
           </View>
         </Section>
 
@@ -169,6 +169,7 @@ export default function App() {
         contentHeight={contentH}
         viewportHeight={viewportH}
         label={current}
+        compact={narrow}
         onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })}
       />
     </SafeAreaView>
@@ -191,11 +192,11 @@ function GridBackground() {
   );
 }
 
-function Section({ kicker, title, children, onLayout }) {
+function Section({ kicker, title, children, onLayout, narrow }) {
   return (
-    <View onLayout={onLayout} style={{ marginTop: 72 }}>
+    <View onLayout={onLayout} style={{ marginTop: narrow ? 48 : 72 }}>
       <Text style={styles.kicker}>// {kicker}</Text>
-      <Text style={[styles.sectionTitle, textGlow(COLORS.pink)]}>{title.toUpperCase()}</Text>
+      <Text style={[styles.sectionTitle, textGlow(COLORS.pink), narrow && m.sectionTitle]}>{title.toUpperCase()}</Text>
       {children}
     </View>
   );
@@ -227,12 +228,12 @@ function NeonButton({ label, onPress, small }) {
   );
 }
 
-function Monitor({ label, onPress }) {
+function Monitor({ label, onPress, narrow }) {
   return (
-    <Pressable onPress={onPress} style={{ alignItems: 'center', flex: 1 }}>
+    <Pressable onPress={onPress} style={{ alignItems: 'center', flex: narrow ? undefined : 1 }}>
       {({ pressed, hovered }) => (
         <>
-          <View style={[styles.screen, glow(COLORS.pink), (pressed || hovered) && { backgroundColor: '#2A1424' }]}>
+          <View style={[styles.screen, glow(COLORS.pink), narrow && m.screen, (pressed || hovered) && { backgroundColor: '#2A1424' }]}>
             {Array.from({ length: 14 }).map((_, i) => (
               <View key={i} style={[styles.scanline, { top: i * 7 }]} />
             ))}
@@ -246,7 +247,7 @@ function Monitor({ label, onPress }) {
   );
 }
 
-function LinkCard({ label, sub, url, color }) {
+function LinkCard({ label, sub, url, color, narrow }) {
   return (
     <Pressable
       onPress={() => Linking.openURL(url)}
@@ -255,7 +256,7 @@ function LinkCard({ label, sub, url, color }) {
         (hovered || pressed) && { transform: [{ translateY: -3 }] },
       ]}
     >
-      <Text style={[styles.linkLabel, { color }, textGlow(color)]}>{label} ↗</Text>
+      <Text style={[styles.linkLabel, { color }, textGlow(color), narrow && { fontSize: 16 }]}>{label} ↗</Text>
       <Text style={styles.muted}>{sub}</Text>
     </Pressable>
   );
@@ -322,4 +323,16 @@ const styles = StyleSheet.create({
 
   linkLabel: { fontFamily: FONTS.display, fontSize: 20, letterSpacing: 3 },
   footer: { fontFamily: FONTS.body, color: COLORS.muted, fontSize: 12, textAlign: 'center', marginTop: 72 },
+});
+
+// Ajustements mobile (largeur < 640) : appliqués par-dessus les styles PC, qui restent inchangés.
+const m = StyleSheet.create({
+  avatar: { width: '100%', maxWidth: 340, alignSelf: 'center' },
+  firstName: { fontSize: 26, letterSpacing: 3, textAlign: 'center' },
+  lastName: { fontSize: 32, letterSpacing: 1 },
+  role: { fontSize: 14, textAlign: 'center', marginBottom: 20 },
+  monitors: { flexDirection: 'column', gap: 18, marginTop: 48 },
+  screen: { width: '100%', height: 80 },
+  sectionTitle: { fontSize: 22, letterSpacing: 2, marginBottom: 16 },
+  body: { fontSize: 15, lineHeight: 23 },
 });

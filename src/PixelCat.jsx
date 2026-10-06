@@ -37,7 +37,7 @@ export function CatSprite({ pixel = 6 }) {
  * Le chat descend le long du bord droit au rythme du scroll
  * et annonce la section courante dans une bulle.
  */
-export default function ScrollCat({ scrollY, contentHeight, viewportHeight, label, onPress }) {
+export default function ScrollCat({ scrollY, contentHeight, viewportHeight, label, onPress, compact }) {
   const bob = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -66,13 +66,13 @@ export default function ScrollCat({ scrollY, contentHeight, viewportHeight, labe
   });
 
   return (
-    <Animated.View pointerEvents="box-none" style={[styles.wrap, { transform: [{ translateY }] }]}>
-      <View style={styles.bubble}>
-        <Text style={styles.bubbleText}>{label}</Text>
+    <Animated.View pointerEvents="box-none" style={[styles.wrap, compact && { right: 4 }, { transform: [{ translateY }] }]}>
+      <View style={[styles.bubble, compact && { paddingHorizontal: 6, paddingVertical: 3 }]}>
+        <Text style={[styles.bubbleText, compact && { fontSize: 7 }]}>{label}</Text>
       </View>
       <Pressable onPress={onPress} accessibilityLabel="Remonter en haut">
         <Animated.View style={{ transform: [{ translateY: bob }, { rotate }] }}>
-          <Image source={{ uri: robot }} style={styles.robot} resizeMode="contain" />
+          <Image source={{ uri: robot }} style={[styles.robot, compact && styles.robotCompact]} resizeMode="contain" />
         </Animated.View>
       </Pressable>
     </Animated.View>
@@ -91,5 +91,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   robot: { width: 120, height: 116 },
+  robotCompact: { width: 56, height: 54 },
   bubbleText: { color: COLORS.cyan, fontFamily: FONTS.pixel, fontSize: 9 },
 });
