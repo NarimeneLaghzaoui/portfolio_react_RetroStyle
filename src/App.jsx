@@ -50,7 +50,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.root}>
-      <View style={StyleSheet.absoluteFill} pointerEvents="none">
+      <View style={[StyleSheet.absoluteFill, { overflow: 'hidden' }]} pointerEvents="none">
         <GridBackground />
       </View>
 
@@ -265,7 +265,7 @@ function LinkCard({ label, sub, url, color, narrow }) {
 /* ───────── Styles ───────── */
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: COLORS.bg },
+  root: { flex: 1, width: '100%', backgroundColor: COLORS.bg, overflow: 'hidden' },
   content: { paddingTop: 32, paddingBottom: 80, maxWidth: 1100, width: '100%', alignSelf: 'center' },
 
   hero: { flexDirection: 'row', alignItems: 'center', gap: 20 },
