@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# build
+dist/
+
+# Vercel
+.vercel/
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# OS
+.DS_Store
+
+# local env files
+.env*.local
